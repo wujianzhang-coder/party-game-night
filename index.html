@@ -640,7 +640,7 @@
     <button class="btn btn-primary" onclick="Game.showSetup()" style="font-size:1.2rem;padding:16px 48px;border-radius:60px;">
       开始游戏 🚀
     </button>
-    <p style="margin-top:16px;font-size:0.8rem;color:var(--text-secondary);">2 ~ 8 名玩家 · 60+ 张任务卡</p>
+    <p style="margin-top:16px;font-size:0.8rem;color:var(--text-secondary);">2 ~ 12 名玩家 · 90+ 张任务卡</p>
   </div>
 
   <!-- ===== SETUP SCREEN ===== -->
@@ -847,6 +847,11 @@ const TASKS = {
       { id: 'ma8',  text: '指定一个人，两人同时模仿对方的姿势', emoji: '🪞' },
       { id: 'ma9',  text: '大家齐喊你的名字三声，你回应一个感谢', emoji: '📣' },
       { id: 'ma10', text: '和旁边的人互换座位，全程不说话', emoji: '🔄' },
+      { id: 'ma11', text: '选3个人，和他们每人做一次不同风格的击掌', emoji: '✋' },
+      { id: 'ma12', text: '和对面的人用手指比出一个爱心', emoji: '💕' },
+      { id: 'ma13', text: '全场轮流说一个字，组成一句祝福你的话', emoji: '📝' },
+      { id: 'ma14', text: '指定一人，你们俩一起做一个鬼脸合影', emoji: '🤪' },
+      { id: 'ma15', text: '所有人同时竖起大拇指，你决定谁最帅/美', emoji: '👍' },
     ],
     truth: [
       { id: 'mt1',  text: '说出你觉得在场最幽默的一个人', emoji: '😄' },
@@ -859,6 +864,11 @@ const TASKS = {
       { id: 'mt8',  text: '你有没有曾经假装没看到消息不回？说出来', emoji: '📲' },
       { id: 'mt9',  text: '你觉得自己的哪个习惯最招人烦？', emoji: '🙃' },
       { id: 'mt10', text: '说出一个让你现在还觉得尴尬的回忆', emoji: '😬' },
+      { id: 'mt11', text: '你觉得自己最像什么动物？为什么？', emoji: '🐾' },
+      { id: 'mt12', text: '说出一个你很想尝试但一直没勇气做的事', emoji: '💭' },
+      { id: 'mt13', text: '你最感谢在场的哪一个人？说出一件具体的事', emoji: '🙏' },
+      { id: 'mt14', text: '如果给你一百万让你放弃现在的工作/学业，你愿意吗？', emoji: '💰' },
+      { id: 'mt15', text: '说出一个你认为自己比别人强的地方', emoji: '🏆' },
     ],
     dare: [
       { id: 'md1',  text: '用30秒时间向全场介绍你自己，越夸张越好', emoji: '🎤' },
@@ -871,6 +881,11 @@ const TASKS = {
       { id: 'md8',  text: '原地连续转圈10次，停下后走直线', emoji: '🌀' },
       { id: 'md9',  text: '背对大家，用屁股写出你的名字', emoji: '✍️' },
       { id: 'md10', text: '做出你最得意的表情保持10秒', emoji: '😎' },
+      { id: 'md11', text: '用一句话形容在场的每一个人（简短即可）', emoji: '🗣️' },
+      { id: 'md12', text: '随机选一首歌，清唱其中一句', emoji: '🎵' },
+      { id: 'md13', text: '原地做3个深蹲，同时大喊"派对万岁"', emoji: '🏋️' },
+      { id: 'md14', text: '模仿一个机器人的声音说"我是派对机器人"', emoji: '🤖' },
+      { id: 'md15', text: '用3种不同情绪说"今晚真开心"', emoji: '🎭' },
     ],
   },
 
@@ -887,6 +902,11 @@ const TASKS = {
       { id: 'na8',  text: '和对面的人互扔花生/糖果，先接住的人可以给对方分配喝酒量', emoji: '🥜' },
       { id: 'na9',  text: '全场按顺序报数到20，说错或漏的人喝酒', emoji: '🔢' },
       { id: 'na10', text: '挑战：左右两个人互相夸赞30秒，不能重复', emoji: '🌟' },
+      { id: 'na11', text: '和任意三人组成"人体电话线"，第一人耳语传到最后一人', emoji: '📞' },
+      { id: 'na12', text: '选5个人，依次和他们做不同国家的打招呼方式', emoji: '🌍' },
+      { id: 'na13', text: '全场所有人站起来，按生日月份重新排列座位', emoji: '📅' },
+      { id: 'na14', text: '和对面的人做"镜像动作"挑战，你动他/她必须模仿，持续15秒', emoji: '🪞' },
+      { id: 'na15', text: '选3人组队，四人一起用身体拼出"LOVE"的形状', emoji: '❤️' },
     ],
     truth: [
       { id: 'nt1',  text: '说出你觉得在场最帅或最美的人，并说原因', emoji: '😍' },
@@ -899,6 +919,11 @@ const TASKS = {
       { id: 'nt8',  text: '说出你微信里最长时间没联系的人，以及原因', emoji: '💬' },
       { id: 'nt9',  text: '你有没有做过让自己觉得最幼稚的事情？说出来', emoji: '👶' },
       { id: 'nt10', text: '如果今晚必须和某人结伴回家，你选谁？', emoji: '🚗' },
+      { id: 'nt11', text: '说出一个你最羡慕在场某个人的特质', emoji: '✨' },
+      { id: 'nt12', text: '你最近一次哭是因为什么？简单说说', emoji: '😢' },
+      { id: 'nt13', text: '如果今晚在场的某人能成为你的室友，你希望是谁？', emoji: '🏠' },
+      { id: 'nt14', text: '说出一个你觉得自己和某个在场的人很像的地方', emoji: '👥' },
+      { id: 'nt15', text: '你有没有对在场某个人"第一印象"和"现在印象"差别很大？说说', emoji: '🤔' },
     ],
     dare: [
       { id: 'nd1',  text: '模仿一个明星的招牌动作或表情，让大家猜', emoji: '🌟' },
@@ -911,6 +936,11 @@ const TASKS = {
       { id: 'nd8',  text: '给一个你认为需要安慰的人发一条真诚的消息', emoji: '💝' },
       { id: 'nd9',  text: '用两只手比划出今天你印象最深的事', emoji: '🙌' },
       { id: 'nd10', text: '讲一个冷笑话，如果没人笑就喝酒', emoji: '😂' },
+      { id: 'nd11', text: '用方言说一段自我介绍（不会方言就模仿）', emoji: '🗺️' },
+      { id: 'nd12', text: '蒙眼摸手猜人：被指定的3人伸手，你摸手猜是谁', emoji: '🫳' },
+      { id: 'nd13', text: '站起来跳一段你会的最完整的舞蹈（至少15秒）', emoji: '💃' },
+      { id: 'nd14', text: '用新闻联播播音员的语气播报"今晚派对新闻"', emoji: '📺' },
+      { id: 'nd15', text: '给在场每个人起一个"今晚专属外号"，不得重复', emoji: '🏷️' },
     ],
   },
 
@@ -927,6 +957,11 @@ const TASKS = {
       { id: 'ca8',  text: '大家每人用身体比出一个字母，拼出一个单词', emoji: '🔤' },
       { id: 'ca9',  text: '和右边的人"大眼瞪小眼"，先眨眼喝酒', emoji: '😤' },
       { id: 'ca10', text: '全场一起倒数3-2-1，同时喊出心里一个数字，相同的人喝酒', emoji: '🎲' },
+      { id: 'ca11', text: '选6人排成一排，你们一起用身体组成一条龙舞动起来', emoji: '🐉' },
+      { id: 'ca12', text: '全场分成两组，进行"拉歌"对决，输的组每人喝一口', emoji: '🎤' },
+      { id: 'ca13', text: '选3人，你们4个围成圈手牵手，每人说一句真心话', emoji: '🔄' },
+      { id: 'ca14', text: '指定全场最安静的人，你和他/她一起表演一段即兴双人舞', emoji: '💃' },
+      { id: 'ca15', text: '所有人站成一圈，你选方向开始"击掌传花"，停到谁谁喝酒', emoji: '🌸' },
     ],
     truth: [
       { id: 'ct1',  text: '说出你觉得今晚在场最想和你来一张亲密合照的人', emoji: '📸' },
@@ -939,6 +974,11 @@ const TASKS = {
       { id: 'ct8',  text: '说出你认为今晚最能制造"名场面"的人，并预测他会怎么做', emoji: '🎬' },
       { id: 'ct9',  text: '说出你认为今晚最难令你开怀大笑的人，并解释原因', emoji: '😂' },
       { id: 'ct10', text: '如果今晚某人必须在你面前当场哭出来，你希望是谁？为什么？', emoji: '😢' },
+      { id: 'ct11', text: '说出一个你在场最想"重新认识"的人，以及为什么', emoji: '🔄' },
+      { id: 'ct12', text: '如果今晚在场的所有人都要选一个人当"今晚之王/后"，你觉得会是谁？', emoji: '👑' },
+      { id: 'ct13', text: '说出你觉得今晚最可能被偷拍发到朋友圈的人', emoji: '📸' },
+      { id: 'ct14', text: '如果让你给今晚的派对起一个名字，你会起什么？', emoji: '📝' },
+      { id: 'ct15', text: '你觉得今晚谁会是最晚离开的人？为什么？', emoji: '🌙' },
     ],
     dare: [
       { id: 'cd1',  text: '表演30秒无实物"卡拉OK"，题目由旁边的人指定', emoji: '🎶' },
@@ -951,6 +991,11 @@ const TASKS = {
       { id: 'cd8',  text: '编一段关于今晚所有人的故事，30秒讲完', emoji: '📖' },
       { id: 'cd9',  text: '学刚才被你点名的人，做一个他/她刚才做过的动作', emoji: '🪞' },
       { id: 'cd10', text: '闭眼，全场喂给你一种食物/饮料，你必须猜出是什么', emoji: '🫣' },
+      { id: 'cd11', text: '即兴主持一场"颁奖典礼"，给在场5个人颁奖，理由要搞笑', emoji: '🏆' },
+      { id: 'cd12', text: '用Rap即兴 diss 你左边的人（友善版，不能有恶意）', emoji: '🎤' },
+      { id: 'cd13', text: '模仿今晚在场的3个人的招牌动作或说话方式', emoji: '🎭' },
+      { id: 'cd14', text: '挑战：用屁股写"派对狂欢夜"五个字，全场数数', emoji: '📝' },
+      { id: 'cd15', text: '被全场投票选出"今晚最欠扁的人"，做一个求饶的表情包姿势', emoji: '🙇' },
     ],
   },
 };
@@ -1057,7 +1102,7 @@ const Game = (() => {
 
   /* ---- Expose: changePlayerCount ---- */
   function changePlayerCount(delta) {
-    const newCount = Math.min(8, Math.max(2, state.playerCount + delta));
+    const newCount = Math.min(12, Math.max(2, state.playerCount + delta));
     if (newCount === state.playerCount) return;
     state.playerCount = newCount;
     getEl('playerCountDisplay').textContent = newCount;
