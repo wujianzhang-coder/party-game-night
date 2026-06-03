@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>派对狂欢夜 🎉</title>
+<style>
+  /* ===== CSS Variables ===== */
+  :root {
+    --bg-dark: #0a0015;
+    --bg-grad-1: #0d0030;
+    --bg-grad-2: #1a0040;
+    --neon-pink: #ff2d78;
+    --neon-blue: #00d4ff;
+    --neon-purple: #bf00ff;
+    --neon-yellow: #ffe600;
+    --neon-green: #00ff88;
+    --neon-orange: #ff8c00;
+    --card-body: #2ee1b0;
+    --card-dare: #ff6a2a;
+    --card-truth: #3b82f6;
+    --card-action: #22c55e;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255,255,255,0.75);
+    --glass-bg: rgba(255,255,255,0.05);
+    --glass-border: rgba(255,255,255,0.12);
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 8px;
+    --shadow-neon-pink: 0 0 20px rgba(255,45,120,0.6), 0 0 40px rgba(255,45,120,0.3);
+    --shadow-neon-blue: 0 0 20px rgba(0,212,255,0.6), 0 0 40px rgba(0,212,255,0.3);
+    --shadow-neon-purple: 0 0 20px rgba(191,0,255,0.6), 0 0 40px rgba(191,0,255,0.3);
+    --transition: 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  /* ===== Reset & Base ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { height: 100%; }
+  body {
+    min-height: 100vh;
+    background: radial-gradient(ellipse at 20% 20%, #2a0060 0%, var(--bg-dark) 50%),
+                radial-gradient(ellipse at 80% 80%, #0d1a4a 0%, transparent 60%);
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ===== Canvas Background ===== */
+  #bgCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== App Container ===== */
+  #app {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+  }
+
+  /* ===== Screens ===== */
+  .screen {
+    display: none;
+    min-height: 100vh;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.4s ease;
+  }
+  .screen.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== Glass Card ===== */
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: var(--radius-lg);
+  }
+
+  /* ===== Neon Title ===== */
+  .neon-title {
+    font-size: clamp(2.2rem, 8vw, 4rem);
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple), var(--neon-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(0 0 15px rgba(255,45,120,0.5));
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .neon-subtitle {
+    font-size: clamp(0.85rem, 3vw, 1.1rem);
+    color: var(--text-secondary);
+    text-align: center;
+    letter-spacing: 0.1em;
+    margin-bottom: 30px;
+  }
+
+  /* ===== Buttons ===== */
+  .btn {
+    border: none; outline: none; cursor: pointer;
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active { transform: scale(0.96); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--neon-pink) 0%, var(--neon-purple) 100%);
+    color: #fff;
+    padding: 14px 36px;
+    font-size: 1.1rem;
+    box-shadow: var(--shadow-neon-pink);
+  }
+  .btn-primary:hover { box-shadow: 0 0 30px rgba(255,45,120,0.8), 0 0 60px rgba(255,45,120,0.4); }
+
+  .btn-secondary {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    padding: 12px 28px;
+    font-size: 0.95rem;
+    backdrop-filter: blur(8px);
+  }
+  .btn-secondary:hover { border-color: var(--neon-blue); box-shadow: var(--shadow-neon-blue); }
+
+  .btn-success {
+    background: linear-gradient(135deg, #00c853, #00e676);
+    color: #000;
+    padding: 14px 32px;
+    font-size: 1rem;
+    box-shadow: 0 0 20px rgba(0,200,83,0.5);
+  }
+  .btn-skip {
+    background: linear-gradient(135deg, #ff6b35, #ff8c00);
+    color: #fff;
+    padding: 14px 32px;
+    font-size: 1rem;
+    box-shadow: 0 0 20px rgba(255,107,53,0.5);
+  }
+
+  .btn-big-draw {
+    background: linear-gradient(135deg, var(--neon-yellow) 0%, var(--neon-orange) 50%, var(--neon-pink) 100%);
+    color: #1a0040;
+    padding: 22px 50px;
+    font-size: clamp(1.3rem, 5vw, 1.8rem);
+    font-weight: 900;
+    border-radius: 60px;
+    box-shadow: 0 0 30px rgba(255,230,0,0.6), 0 0 60px rgba(255,140,0,0.4), 0 8px 32px rgba(0,0,0,0.5);
+    letter-spacing: 0.08em;
+    position: relative;
+    overflow: hidden;
+    animation: pulse-btn 2s ease-in-out infinite;
+  }
+  .btn-big-draw::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.3) 60%, transparent 70%);
+    transform: translateX(-100%);
+    animation: shine 3s ease-in-out infinite;
+  }
+  @keyframes pulse-btn {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+  }
+  @keyframes shine {
+    0% { transform: translateX(-100%); }
+    50%, 100% { transform: translateX(200%); }
+  }
+
+  /* ===== Setup Screen ===== */
+  #setupScreen { justify-content: flex-start; padding-top: 40px; }
+  .setup-container {
+    width: 100%;
+    max-width: 480px;
+  }
+  .setup-section {
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .setup-label {
+    font-size: 0.85rem;
+    color: var(--neon-blue);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  /* Player Count */
+  .player-count-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .count-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 2px solid var(--neon-purple);
+    background: transparent;
+    color: var(--neon-purple);
+    font-size: 1.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    flex-shrink: 0;
+  }
+  .count-btn:hover { background: var(--neon-purple); color: #fff; box-shadow: var(--shadow-neon-purple); }
+  .count-display {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--neon-yellow);
+    text-shadow: 0 0 15px rgba(255,230,0,0.5);
+    min-width: 40px;
+    text-align: center;
+  }
+
+  /* Player Names */
+  #playerNamesContainer { display: flex; flex-direction: column; gap: 10px; }
+  .player-name-input {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: #fff;
+    padding: 10px 14px;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+  }
+  .player-name-input::placeholder { color: rgba(255,255,255,0.3); }
+  .player-name-input:focus { border-color: var(--neon-blue); box-shadow: 0 0 12px rgba(0,212,255,0.3); }
+
+  /* Difficulty */
+  .diff-group { display: flex; gap: 10px; flex-wrap: wrap; }
+  .diff-btn {
+    flex: 1; min-width: 80px;
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--glass-border);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .diff-btn.active-mild   { border-color: var(--neon-green);  color: var(--neon-green);  box-shadow: 0 0 12px rgba(0,255,136,0.4); background: rgba(0,255,136,0.1); }
+  .diff-btn.active-normal { border-color: var(--neon-blue);   color: var(--neon-blue);   box-shadow: 0 0 12px rgba(0,212,255,0.4); background: rgba(0,212,255,0.1); }
+  .diff-btn.active-crazy  { border-color: var(--neon-pink);   color: var(--neon-pink);   box-shadow: 0 0 12px rgba(255,45,120,0.4); background: rgba(255,45,120,0.1); }
+
+  /* Drink Level */
+  .drink-group { display: flex; gap: 10px; flex-wrap: wrap; }
+  .drink-btn {
+    flex: 1; min-width: 70px;
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--glass-border);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    text-align: center;
+  }
+  .drink-btn.active { border-color: var(--neon-orange); color: var(--neon-orange); background: rgba(255,140,0,0.1); box-shadow: 0 0 12px rgba(255,140,0,0.4); }
+
+  /* ===== Game Screen ===== */
+  #gameScreen { padding: 16px; justify-content: flex-start; }
+
+  /* Top Bar */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 480px;
+    margin-bottom: 12px;
+  }
+  .top-bar-title {
+    font-size: 1rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--neon-pink), var(--neon-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .card-counter {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: 4px 10px;
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .card-counter span { color: var(--neon-yellow); font-weight: 700; }
+
+  /* Current Player */
+  .player-indicator {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+  }
+  .player-nav-btn {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .player-nav-btn:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
+  .current-player-info { text-align: center; flex: 1; }
+  .current-player-label { font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.1em; text-transform: uppercase; }
+  .current-player-name {
+    font-size: clamp(1.4rem, 5vw, 2rem);
+    font-weight: 900;
+    color: var(--neon-yellow);
+    text-shadow: 0 0 20px rgba(255,230,0,0.5);
+    line-height: 1.2;
+  }
+  .round-indicator { font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px; }
+
+  /* Card Area */
+  .card-area {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 18px;
+    perspective: 1000px;
+    position: relative;
+    min-height: 220px;
+  }
+
+  /* Draw Button Area (when no card shown) */
+  .draw-zone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    transition: opacity 0.3s;
+  }
+  .draw-zone.hidden { opacity: 0; pointer-events: none; position: absolute; top: 0; left: 0; width: 100%; }
+
+  /* Task Card 3D Flip */
+  .task-card-wrapper {
+    width: 100%;
+    min-height: 200px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .task-card-wrapper.flipped { transform: rotateY(180deg); }
+  .task-card-wrapper.hidden-card { opacity: 0; pointer-events: none; position: absolute; top: 0; left: 0; width: 100%; }
+
+  .card-face {
+    position: absolute; top: 0; left: 0;
+    width: 100%; min-height: 200px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: var(--radius-lg);
+    padding: 24px 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .card-back {
+    background: linear-gradient(135deg, #2d0060, #0d1a4a);
+    border: 2px solid var(--neon-purple);
+    box-shadow: 0 0 30px rgba(191,0,255,0.3), 0 8px 32px rgba(0,0,0,0.6);
+  }
+  .card-back-icon { font-size: 3.5rem; filter: drop-shadow(0 0 10px rgba(191,0,255,0.8)); }
+  .card-back-text { font-size: 0.9rem; color: var(--text-secondary); margin-top: 8px; letter-spacing: 0.1em; }
+
+  .card-front {
+    transform: rotateY(180deg);
+    min-height: 200px;
+  }
+  .card-front.type-action {
+    background: linear-gradient(135deg, #064a1e, #0a6b2d);
+    border: 2px solid var(--card-action);
+    box-shadow: 0 0 30px rgba(34,197,94,0.4), 0 8px 32px rgba(0,0,0,0.6);
+  }
+  .card-front.type-truth {
+    background: linear-gradient(135deg, #0a1a4a, #0d2a6b);
+    border: 2px solid var(--card-truth);
+    box-shadow: 0 0 30px rgba(59,130,246,0.4), 0 8px 32px rgba(0,0,0,0.6);
+  }
+  .card-front.type-dare {
+    background: linear-gradient(135deg, #4a1a00, #6b2a00);
+    border: 2px solid var(--card-dare);
+    box-shadow: 0 0 30px rgba(255,106,42,0.4), 0 8px 32px rgba(0,0,0,0.6);
+  }
+
+  .card-type-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  .badge-action { background: rgba(34,197,94,0.2); color: var(--card-action); border: 1px solid var(--card-action); }
+  .badge-truth  { background: rgba(59,130,246,0.2); color: #7eb5ff; border: 1px solid var(--card-truth); }
+  .badge-dare   { background: rgba(255,106,42,0.2); color: #ffa070; border: 1px solid var(--card-dare); }
+
+  .card-type-emoji { font-size: 2rem; margin-bottom: 8px; }
+  .card-task-text {
+    font-size: clamp(1rem, 4vw, 1.25rem);
+    font-weight: 700;
+    line-height: 1.5;
+    text-align: center;
+    color: #fff;
+  }
+  .card-drink-hint {
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.6);
+    background: rgba(0,0,0,0.3);
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  /* Action Buttons */
+  .action-buttons {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .action-buttons .btn { flex: 1; min-width: 120px; }
+
+  /* Shuffle Notice */
+  .shuffle-notice {
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    color: var(--neon-yellow);
+    border: 1px solid rgba(255,230,0,0.3);
+    background: rgba(255,230,0,0.08);
+    text-align: center;
+    animation: glow-pulse 1.5s ease-in-out infinite;
+    display: none;
+  }
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 8px rgba(255,230,0,0.3); }
+    50% { box-shadow: 0 0 20px rgba(255,230,0,0.6); }
+  }
+
+  /* Player Progress Bar */
+  .players-strip {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .player-chip {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: var(--text-secondary);
+    transition: all 0.3s;
+  }
+  .player-chip.active-player {
+    background: rgba(255,230,0,0.15);
+    border-color: var(--neon-yellow);
+    color: var(--neon-yellow);
+    box-shadow: 0 0 12px rgba(255,230,0,0.3);
+  }
+
+  /* Bottom Bar */
+  .bottom-bar {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+  .btn-restart {
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    padding: 8px 18px;
+    font-size: 0.8rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .btn-restart:hover { border-color: var(--neon-pink); color: var(--neon-pink); }
+  .btn-fullscreen {
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .btn-fullscreen:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
+
+  /* ===== Toast Notification ===== */
+  .toast {
+    position: fixed;
+    bottom: 30px; left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(30,10,60,0.95);
+    border: 1px solid var(--neon-purple);
+    border-radius: 30px;
+    padding: 12px 24px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    box-shadow: var(--shadow-neon-purple);
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 1000;
+    text-align: center;
+    max-width: 90vw;
+    backdrop-filter: blur(16px);
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ===== Welcome Screen ===== */
+  #welcomeScreen { gap: 8px; }
+  .welcome-emoji { font-size: 4rem; animation: bounce 2s ease-in-out infinite; }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  .welcome-features {
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 8px 0 20px;
+    max-width: 380px;
+  }
+  .feat-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border: 1px solid;
+  }
+  .feat-chip.green { border-color: var(--neon-green); color: var(--neon-green); background: rgba(0,255,136,0.08); }
+  .feat-chip.blue  { border-color: var(--neon-blue);  color: var(--neon-blue);  background: rgba(0,212,255,0.08); }
+  .feat-chip.orange{ border-color: var(--neon-orange);color: var(--neon-orange);background: rgba(255,140,0,0.08); }
+
+  /* ===== Firework Burst ===== */
+  .firework-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .burst-text {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+    font-weight: 900;
+    animation: burst-anim 1.2s forwards;
+    text-align: center;
+    filter: drop-shadow(0 0 20px rgba(255,230,0,0.8));
+  }
+  @keyframes burst-anim {
+    0%   { transform: scale(0); opacity: 0; }
+    40%  { transform: scale(1.2); opacity: 1; }
+    70%  { transform: scale(0.95); opacity: 1; }
+    100% { transform: scale(1.3); opacity: 0; }
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 400px) {
+    .action-buttons { gap: 8px; }
+    .action-buttons .btn { padding: 12px 16px; font-size: 0.9rem; }
+  }
+  @media (min-height: 800px) {
+    #gameScreen { justify-content: center; padding-top: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<div id="app">
+
+  <!-- ===== WELCOME SCREEN ===== -->
+  <div id="welcomeScreen" class="screen active">
+    <div class="welcome-emoji">🎉</div>
+    <h1 class="neon-title">派对狂欢夜</h1>
+    <p class="neon-subtitle">PARTY NIGHT · 酒桌互动小游戏</p>
+    <div class="welcome-features">
+      <span class="feat-chip green">🤝 肢体互动</span>
+      <span class="feat-chip blue">💬 真心话</span>
+      <span class="feat-chip orange">🔥 挑战任务</span>
+    </div>
+    <button class="btn btn-primary" onclick="Game.showSetup()" style="font-size:1.2rem;padding:16px 48px;border-radius:60px;">
+      开始游戏 🚀
+    </button>
+    <p style="margin-top:16px;font-size:0.8rem;color:var(--text-secondary);">2 ~ 8 名玩家 · 60+ 张任务卡</p>
+  </div>
+
+  <!-- ===== SETUP SCREEN ===== -->
+  <div id="setupScreen" class="screen">
+    <div class="setup-container">
+      <h2 class="neon-title" style="font-size:2rem;margin-bottom:4px;">游戏设置</h2>
+      <p class="neon-subtitle" style="margin-bottom:20px;">自定义你的派对体验</p>
+
+      <!-- Player Count -->
+      <div class="glass setup-section">
+        <div class="setup-label">👥 玩家人数</div>
+        <div class="player-count-row">
+          <button class="count-btn" onclick="Game.changePlayerCount(-1)">−</button>
+          <div class="count-display" id="playerCountDisplay">4</div>
+          <button class="count-btn" onclick="Game.changePlayerCount(1)">+</button>
+          <span style="color:var(--text-secondary);font-size:0.9rem;margin-left:4px;">人</span>
+        </div>
+      </div>
+
+      <!-- Player Names -->
+      <div class="glass setup-section">
+        <div class="setup-label">✏️ 玩家昵称（可选）</div>
+        <div id="playerNamesContainer"></div>
+      </div>
+
+      <!-- Difficulty -->
+      <div class="glass setup-section">
+        <div class="setup-label">🎯 游戏难度</div>
+        <div class="diff-group">
+          <button class="diff-btn" id="diff-mild"   onclick="Game.setDiff('mild')">😊 温和</button>
+          <button class="diff-btn active-normal" id="diff-normal" onclick="Game.setDiff('normal')">😏 普通</button>
+          <button class="diff-btn" id="diff-crazy"  onclick="Game.setDiff('crazy')">🔥 疯狂</button>
+        </div>
+      </div>
+
+      <!-- Drink Level -->
+      <div class="glass setup-section">
+        <div class="setup-label">🍺 喝酒量</div>
+        <div class="drink-group">
+          <button class="drink-btn active" id="drink-sip"  onclick="Game.setDrink('sip','小口')">小口</button>
+          <button class="drink-btn" id="drink-gulp" onclick="Game.setDrink('gulp','一口')">一口</button>
+          <button class="drink-btn" id="drink-chug" onclick="Game.setDrink('chug','干杯')">干杯</button>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:8px;padding-bottom:30px;">
+        <button class="btn btn-secondary" onclick="Game.showWelcome()">← 返回</button>
+        <button class="btn btn-primary" onclick="Game.startGame()">开始派对 🎊</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== GAME SCREEN ===== -->
+  <div id="gameScreen" class="screen">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <span class="top-bar-title">🎉 派对狂欢夜</span>
+      <span class="card-counter">卡片 <span id="usedCards">0</span>/<span id="totalCards">0</span></span>
+    </div>
+
+    <!-- Players Strip -->
+    <div class="players-strip" id="playersStrip"></div>
+
+    <!-- Current Player -->
+    <div class="glass player-indicator">
+      <button class="player-nav-btn" onclick="Game.prevPlayer()" title="上一个玩家">◀</button>
+      <div class="current-player-info">
+        <div class="current-player-label">当前玩家</div>
+        <div class="current-player-name" id="currentPlayerName">玩家 1</div>
+        <div class="round-indicator" id="roundIndicator">第 1 轮</div>
+      </div>
+      <button class="player-nav-btn" onclick="Game.nextPlayer()" title="下一个玩家">▶</button>
+    </div>
+
+    <!-- Card Area -->
+    <div class="card-area" id="cardArea">
+      <!-- Draw Zone (visible when no card drawn) -->
+      <div class="draw-zone" id="drawZone">
+        <button class="btn btn-big-draw" id="drawBtn" onclick="Game.drawCard()">
+          🃏 抽取卡片
+        </button>
+      </div>
+      <!-- Task Card (hidden until drawn) -->
+      <div class="task-card-wrapper hidden-card" id="taskCardWrapper">
+        <div class="card-face card-back">
+          <div class="card-back-icon">🎴</div>
+          <div class="card-back-text">翻开看看...</div>
+        </div>
+        <div class="card-face card-front" id="cardFront">
+          <div class="card-type-badge" id="cardTypeBadge"></div>
+          <div class="card-type-emoji" id="cardTypeEmoji"></div>
+          <div class="card-task-text" id="cardTaskText"></div>
+          <div class="card-drink-hint" id="cardDrinkHint"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shuffle Notice -->
+    <div class="shuffle-notice" id="shuffleNotice">🔀 所有卡片已抽完，重新洗牌！</div>
+
+    <!-- Action Buttons (hidden until card drawn) -->
+    <div class="action-buttons" id="actionButtons" style="display:none;">
+      <button class="btn btn-success" onclick="Game.completeTask()">✅ 完成了！</button>
+      <button class="btn btn-skip" onclick="Game.skipTask()">⏭ 跳过（喝酒）</button>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+      <button class="btn-restart" onclick="Game.restartConfirm()">🔄 重新开始</button>
+      <button class="btn-fullscreen" onclick="Game.toggleFullscreen()" id="fullscreenBtn">⛶ 全屏</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+
+/* =============================================
+   CANVAS PARTICLE BACKGROUND
+   ============================================= */
+(function initBgCanvas() {
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let W = 0, H = 0;
+  let particles = [];
+  let raf = null;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.r = Math.random() * 2 + 0.5;
+      this.vx = (Math.random() - 0.5) * 0.4;
+      this.vy = (Math.random() - 0.5) * 0.4;
+      this.alpha = Math.random() * 0.6 + 0.1;
+      const colors = ['#ff2d78','#00d4ff','#bf00ff','#ffe600','#00ff88'];
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+    }
+    update() {
+      this.x += this.vx; this.y += this.vy;
+      if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.globalAlpha = this.alpha;
+      ctx.fill();
+    }
+  }
+
+  function initParticles() {
+    const count = Math.min(Math.floor((W * H) / 8000), 120);
+    particles = Array.from({ length: count }, () => new Particle());
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalAlpha = 1;
+    particles.forEach(p => { p.update(); p.draw(); });
+    raf = requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('resize', () => { resize(); initParticles(); });
+  resize(); initParticles(); loop();
+})();
+
+/* =============================================
+   FIREWORK BURST EFFECT
+   ============================================= */
+function showBurst(text) {
+  const overlay = document.createElement('div');
+  overlay.className = 'firework-overlay';
+  overlay.innerHTML = `<div class="burst-text">${text}</div>`;
+  document.body.appendChild(overlay);
+  setTimeout(() => overlay.remove(), 1300);
+}
+
+/* =============================================
+   TASK DATABASE
+   ============================================= */
+const TASKS = {
+  /** ---- MILD ---- */
+  mild: {
+    action: [
+      { id: 'ma1',  text: '和旁边的人击掌三次，同时喊出"派对！"', emoji: '🙌' },
+      { id: 'ma2',  text: '和对面的人对视5秒，第一个笑的人喝酒', emoji: '👀' },
+      { id: 'ma3',  text: '两人背靠背，一起慢慢蹲下再站起来', emoji: '🧍' },
+      { id: 'ma4',  text: '找一个人一起做同一个动作，必须同步', emoji: '🪄' },
+      { id: 'ma5',  text: '和右边的人手牵手转圈5秒', emoji: '🤝' },
+      { id: 'ma6',  text: '全场每人说一个关于你的优点', emoji: '⭐' },
+      { id: 'ma7',  text: '和左边的人猜拳，输的人帮赢的人倒酒', emoji: '✊' },
+      { id: 'ma8',  text: '指定一个人，两人同时模仿对方的姿势', emoji: '🪞' },
+      { id: 'ma9',  text: '大家齐喊你的名字三声，你回应一个感谢', emoji: '📣' },
+      { id: 'ma10', text: '和旁边的人互换座位，全程不说话', emoji: '🔄' },
+    ],
+    truth: [
+      { id: 'mt1',  text: '说出你觉得在场最幽默的一个人', emoji: '😄' },
+      { id: 'mt2',  text: '你有没有在公开场合出过洋相？说出来', emoji: '🫣' },
+      { id: 'mt3',  text: '最近你的手机里最常刷的App是什么？为什么？', emoji: '📱' },
+      { id: 'mt4',  text: '你今天有没有说过谎？说一件', emoji: '🤥' },
+      { id: 'mt5',  text: '说出一件你认为自己很擅长但其实并不擅长的事', emoji: '😅' },
+      { id: 'mt6',  text: '你今年最后悔的一件事是什么？', emoji: '😔' },
+      { id: 'mt7',  text: '说出你觉得今晚在场最能喝的人', emoji: '🍺' },
+      { id: 'mt8',  text: '你有没有曾经假装没看到消息不回？说出来', emoji: '📲' },
+      { id: 'mt9',  text: '你觉得自己的哪个习惯最招人烦？', emoji: '🙃' },
+      { id: 'mt10', text: '说出一个让你现在还觉得尴尬的回忆', emoji: '😬' },
+    ],
+    dare: [
+      { id: 'md1',  text: '用30秒时间向全场介绍你自己，越夸张越好', emoji: '🎤' },
+      { id: 'md2',  text: '模仿一个广告里的动作或台词', emoji: '📺' },
+      { id: 'md3',  text: '用最搞笑的声音说"我今天状态很好"', emoji: '🎭' },
+      { id: 'md4',  text: '学一声动物叫，让大家猜是什么动物', emoji: '🐾' },
+      { id: 'md5',  text: '站起来跳10秒的舞，随便跳什么', emoji: '💃' },
+      { id: 'md6',  text: '用英文说一段自我介绍（至少10秒）', emoji: '🗣️' },
+      { id: 'md7',  text: '闭眼用手指摸摸左边人的脸，然后猜猜是谁', emoji: '👆' },
+      { id: 'md8',  text: '原地连续转圈10次，停下后走直线', emoji: '🌀' },
+      { id: 'md9',  text: '背对大家，用屁股写出你的名字', emoji: '✍️' },
+      { id: 'md10', text: '做出你最得意的表情保持10秒', emoji: '😎' },
+    ],
+  },
+
+  /** ---- NORMAL ---- */
+  normal: {
+    action: [
+      { id: 'na1',  text: '5秒内找到5个人和你击掌，否则喝酒', emoji: '✋' },
+      { id: 'na2',  text: '和对面的人玩石头剪刀布，输的人喝酒', emoji: '✊' },
+      { id: 'na3',  text: '两人肩靠肩，互相说一句对方最想听的话', emoji: '🤗' },
+      { id: 'na4',  text: '和旁边的人玩"反应测试"：拍手节奏对上了一起喝，差了单独喝', emoji: '👏' },
+      { id: 'na5',  text: '全场一起鼓掌，最后停下来的人喝酒', emoji: '👐' },
+      { id: 'na6',  text: '挑战：你和右边的人同时站起来坐下5次，不能笑', emoji: '🪑' },
+      { id: 'na7',  text: '指定任意一人，两人同时说同一句话——"我爱派对"', emoji: '💬' },
+      { id: 'na8',  text: '和对面的人互扔花生/糖果，先接住的人可以给对方分配喝酒量', emoji: '🥜' },
+      { id: 'na9',  text: '全场按顺序报数到20，说错或漏的人喝酒', emoji: '🔢' },
+      { id: 'na10', text: '挑战：左右两个人互相夸赞30秒，不能重复', emoji: '🌟' },
+    ],
+    truth: [
+      { id: 'nt1',  text: '说出你觉得在场最帅或最美的人，并说原因', emoji: '😍' },
+      { id: 'nt2',  text: '你最近暗恋过谁？只说职业就行', emoji: '💘' },
+      { id: 'nt3',  text: '说出你做过的最冲动的一件事', emoji: '⚡' },
+      { id: 'nt4',  text: '你有没有在朋友面前撒过大谎？描述一下', emoji: '🤫' },
+      { id: 'nt5',  text: '如果今晚在场的人里让你选一个好朋友，你选谁？为什么？', emoji: '🫂' },
+      { id: 'nt6',  text: '说出一件关于你自己的"黑历史"', emoji: '🫙' },
+      { id: 'nt7',  text: '你觉得今晚谁最适合做你的死党？说出理由', emoji: '🤜🤛' },
+      { id: 'nt8',  text: '说出你微信里最长时间没联系的人，以及原因', emoji: '💬' },
+      { id: 'nt9',  text: '你有没有做过让自己觉得最幼稚的事情？说出来', emoji: '👶' },
+      { id: 'nt10', text: '如果今晚必须和某人结伴回家，你选谁？', emoji: '🚗' },
+    ],
+    dare: [
+      { id: 'nd1',  text: '模仿一个明星的招牌动作或表情，让大家猜', emoji: '🌟' },
+      { id: 'nd2',  text: '用最沙雕的方式表白对面的人（戏剧化演出）', emoji: '💌' },
+      { id: 'nd3',  text: '做一个俯卧撑，做不到喝两口酒', emoji: '💪' },
+      { id: 'nd4',  text: '用饶舌风格把你今天做的事说出来（至少20秒）', emoji: '🎤' },
+      { id: 'nd5',  text: '闭眼喝一口饮料，猜出是什么，猜错再喝一口', emoji: '🥃' },
+      { id: 'nd6',  text: '把手机最近3条消息大声读出来（可以马赛克名字）', emoji: '📱' },
+      { id: 'nd7',  text: '用夸张的肢体语言表演"我迟到了"这个场景', emoji: '⏰' },
+      { id: 'nd8',  text: '给一个你认为需要安慰的人发一条真诚的消息', emoji: '💝' },
+      { id: 'nd9',  text: '用两只手比划出今天你印象最深的事', emoji: '🙌' },
+      { id: 'nd10', text: '讲一个冷笑话，如果没人笑就喝酒', emoji: '😂' },
+    ],
+  },
+
+  /** ---- CRAZY ---- */
+  crazy: {
+    action: [
+      { id: 'ca1',  text: '和旁边的人手牵手转圈10秒，同时大喊你的外号', emoji: '🎡' },
+      { id: 'ca2',  text: '全场依次做同一个"连环动作"，最晚的人喝酒', emoji: '🔗' },
+      { id: 'ca3',  text: '左边的人负责喂你喝一口酒（或饮料）', emoji: '🤝' },
+      { id: 'ca4',  text: '和对面的人来一个"怪异握手"，必须持续10秒', emoji: '🤜' },
+      { id: 'ca5',  text: '两人用额头顶住气球撑过10秒，失败了各喝一口', emoji: '🎈' },
+      { id: 'ca6',  text: '全场玩"心跳传声"——耳语一句话，最后一个人说出答案', emoji: '👂' },
+      { id: 'ca7',  text: '选一人，给他/她临时起一个今晚的"外号"，全场同意才算', emoji: '🏷️' },
+      { id: 'ca8',  text: '大家每人用身体比出一个字母，拼出一个单词', emoji: '🔤' },
+      { id: 'ca9',  text: '和右边的人"大眼瞪小眼"，先眨眼喝酒', emoji: '😤' },
+      { id: 'ca10', text: '全场一起倒数3-2-1，同时喊出心里一个数字，相同的人喝酒', emoji: '🎲' },
+    ],
+    truth: [
+      { id: 'ct1',  text: '说出你觉得今晚在场最想和你来一张亲密合照的人', emoji: '📸' },
+      { id: 'ct2',  text: '如果必须在今晚在场的人中选一个永久好友，你选谁，理由是？', emoji: '💎' },
+      { id: 'ct3',  text: '说出你的一个只有最好朋友才知道的秘密', emoji: '🔐' },
+      { id: 'ct4',  text: '说出你认为今晚最可能做出惊人之举的人是谁', emoji: '💣' },
+      { id: 'ct5',  text: '模仿你觉得最像的一个今晚在场的人的口头禅', emoji: '🎭' },
+      { id: 'ct6',  text: '说出一件你从未对任何人说过的事（可以隐去细节）', emoji: '🗝️' },
+      { id: 'ct7',  text: '如果今晚你可以和在场的一个人互换身份一天，你选谁？', emoji: '🔄' },
+      { id: 'ct8',  text: '说出你认为今晚最能制造"名场面"的人，并预测他会怎么做', emoji: '🎬' },
+      { id: 'ct9',  text: '说出你认为今晚最难令你开怀大笑的人，并解释原因', emoji: '😂' },
+      { id: 'ct10', text: '如果今晚某人必须在你面前当场哭出来，你希望是谁？为什么？', emoji: '😢' },
+    ],
+    dare: [
+      { id: 'cd1',  text: '表演30秒无实物"卡拉OK"，题目由旁边的人指定', emoji: '🎶' },
+      { id: 'cd2',  text: '用最浮夸的方式向全场求婚（对象由全场投票选出）', emoji: '💍' },
+      { id: 'cd3',  text: '用两种动物混合的方式叫10秒，比如"猫+狗"', emoji: '🐱🐶' },
+      { id: 'cd4',  text: '解锁手机展示你最近的通话记录第一条的名字（打码数字即可）', emoji: '📞' },
+      { id: 'cd5',  text: '做一个让全场觉得"这人怎么这样"的奇怪动作，保持30秒', emoji: '🤡' },
+      { id: 'cd6',  text: '对着全场说"我今晚最帅/最美"，声音要坚定，否则喝酒', emoji: '💅' },
+      { id: 'cd7',  text: '用你能想到最夸张的方式，模仿一个路人走路', emoji: '🚶' },
+      { id: 'cd8',  text: '编一段关于今晚所有人的故事，30秒讲完', emoji: '📖' },
+      { id: 'cd9',  text: '学刚才被你点名的人，做一个他/她刚才做过的动作', emoji: '🪞' },
+      { id: 'cd10', text: '闭眼，全场喂给你一种食物/饮料，你必须猜出是什么', emoji: '🫣' },
+    ],
+  },
+};
+
+/* =============================================
+   GAME ENGINE
+   ============================================= */
+const Game = (() => {
+  // State
+  let state = {
+    playerCount: 4,
+    playerNames: [],
+    difficulty: 'normal',
+    drinkLabel: '小口',
+    currentPlayerIdx: 0,
+    round: 1,
+    cardDrawn: false,
+    currentCard: null,
+    usedCards: new Set(),
+    totalCards: 0,
+    deck: [],
+    phase: 'welcome', // welcome | setup | game
+  };
+
+  /* ---- Helpers ---- */
+  function getEl(id) { return document.getElementById(id); }
+
+  function showToast(msg, duration = 2200) {
+    const t = getEl('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), duration);
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    getEl(id).classList.add('active');
+  }
+
+  /* ---- Build Deck ---- */
+  function buildDeck(difficulty) {
+    const d = TASKS[difficulty];
+    const all = [...d.action, ...d.truth, ...d.dare];
+    // Shuffle using Fisher-Yates
+    for (let i = all.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [all[i], all[j]] = [all[j], all[i]];
+    }
+    // Tag each card with its type
+    const taggedDeck = all.map(card => {
+      const type = TASKS[difficulty].action.some(c => c.id === card.id) ? 'action'
+                 : TASKS[difficulty].truth.some(c => c.id === card.id) ? 'truth'
+                 : 'dare';
+      return { ...card, type };
+    });
+    return taggedDeck;
+  }
+
+  function rebuildDeck() {
+    state.deck = buildDeck(state.difficulty);
+    state.usedCards = new Set();
+    state.totalCards = state.deck.length;
+  }
+
+  /* ---- Player Names ---- */
+  function getPlayerName(idx) {
+    const custom = state.playerNames[idx];
+    if (custom && custom.trim()) return custom.trim();
+    return `玩家 ${idx + 1}`;
+  }
+
+  /* ---- Setup Screen ---- */
+  function renderPlayerNameInputs(count) {
+    const container = getEl('playerNamesContainer');
+    container.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'player-name-input';
+      input.placeholder = `玩家 ${i + 1} 的名字`;
+      input.maxLength = 12;
+      input.value = state.playerNames[i] || '';
+      input.addEventListener('input', e => { state.playerNames[i] = e.target.value; });
+      container.appendChild(input);
+    }
+  }
+
+  /* ---- Expose: showWelcome ---- */
+  function showWelcome() {
+    showScreen('welcomeScreen');
+    state.phase = 'welcome';
+  }
+
+  /* ---- Expose: showSetup ---- */
+  function showSetup() {
+    showScreen('setupScreen');
+    state.phase = 'setup';
+    getEl('playerCountDisplay').textContent = state.playerCount;
+    renderPlayerNameInputs(state.playerCount);
+    setDiff(state.difficulty, false);
+    setDrink(state.drinkKey || 'sip', state.drinkLabel, false);
+  }
+
+  /* ---- Expose: changePlayerCount ---- */
+  function changePlayerCount(delta) {
+    const newCount = Math.min(8, Math.max(2, state.playerCount + delta));
+    if (newCount === state.playerCount) return;
+    state.playerCount = newCount;
+    getEl('playerCountDisplay').textContent = newCount;
+    renderPlayerNameInputs(newCount);
+  }
+
+  /* ---- Expose: setDiff ---- */
+  function setDiff(diff, animate = true) {
+    state.difficulty = diff;
+    ['mild','normal','crazy'].forEach(d => {
+      const btn = getEl(`diff-${d}`);
+      btn.className = 'diff-btn';
+      if (d === diff) btn.classList.add(`active-${d}`);
+    });
+    if (animate) showToast({ mild: '😊 温和模式，轻松玩！', normal: '😏 普通难度，欢乐继续！', crazy: '🔥 疯狂模式，放开来玩！' }[diff]);
+  }
+
+  /* ---- Expose: setDrink ---- */
+  function setDrink(key, label, animate = true) {
+    state.drinkKey = key;
+    state.drinkLabel = label;
+    ['sip','gulp','chug'].forEach(k => {
+      const btn = getEl(`drink-${k}`);
+      btn.classList.toggle('active', k === key);
+    });
+    if (animate) showToast(`🍺 喝酒量设置为：${label}`);
+  }
+
+  /* ---- Expose: startGame ---- */
+  function startGame() {
+    // Read player names from inputs
+    const inputs = document.querySelectorAll('.player-name-input');
+    state.playerNames = Array.from(inputs).map(inp => inp.value.trim());
+    state.currentPlayerIdx = 0;
+    state.round = 1;
+    state.cardDrawn = false;
+    state.currentCard = null;
+    rebuildDeck();
+    showScreen('gameScreen');
+    state.phase = 'game';
+    renderPlayersStrip();
+    updateGameUI();
+    resetCardArea();
+    showToast('🎉 派对开始！好好玩！');
+  }
+
+  /* ---- Render Players Strip ---- */
+  function renderPlayersStrip() {
+    const strip = getEl('playersStrip');
+    strip.innerHTML = '';
+    for (let i = 0; i < state.playerCount; i++) {
+      const chip = document.createElement('div');
+      chip.className = 'player-chip' + (i === state.currentPlayerIdx ? ' active-player' : '');
+      chip.id = `pchip-${i}`;
+      chip.textContent = getPlayerName(i);
+      strip.appendChild(chip);
+    }
+  }
+
+  /* ---- Update Game UI ---- */
+  function updateGameUI() {
+    getEl('currentPlayerName').textContent = getPlayerName(state.currentPlayerIdx);
+    getEl('roundIndicator').textContent = `第 ${state.round} 轮`;
+    const usedCount = state.usedCards.size;
+    getEl('usedCards').textContent = usedCount;
+    getEl('totalCards').textContent = state.totalCards;
+    // Update player chips
+    for (let i = 0; i < state.playerCount; i++) {
+      const chip = getEl(`pchip-${i}`);
+      if (chip) chip.classList.toggle('active-player', i === state.currentPlayerIdx);
+    }
+  }
+
+  /* ---- Reset Card Area (show draw button) ---- */
+  function resetCardArea() {
+    state.cardDrawn = false;
+    const wrapper = getEl('taskCardWrapper');
+    const drawZone = getEl('drawZone');
+    // Reset flip
+    wrapper.classList.remove('flipped');
+    wrapper.classList.add('hidden-card');
+    drawZone.classList.remove('hidden');
+    getEl('actionButtons').style.display = 'none';
+    getEl('shuffleNotice').style.display = 'none';
+  }
+
+  /* ---- Draw Card ---- */
+  function drawCard() {
+    if (state.cardDrawn) return;
+
+    // Find next undrawn card
+    let available = state.deck.filter(c => !state.usedCards.has(c.id));
+    if (available.length === 0) {
+      // Reshuffle
+      rebuildDeck();
+      available = state.deck;
+      const notice = getEl('shuffleNotice');
+      notice.style.display = 'block';
+      setTimeout(() => { notice.style.display = 'none'; }, 3000);
+      showToast('🔀 已洗牌，继续派对！');
+    }
+
+    const card = available[Math.floor(Math.random() * available.length)];
+    state.usedCards.add(card.id);
+    state.currentCard = card;
+    state.cardDrawn = true;
+
+    updateGameUI();
+    renderCard(card);
+    animateCardReveal();
+    getEl('actionButtons').style.display = 'flex';
+  }
+
+  /* ---- Render Card Content ---- */
+  function renderCard(card) {
+    const typeConfig = {
+      action: { badge: '🤝 肢体互动', badgeClass: 'badge-action', frontClass: 'type-action' },
+      truth:  { badge: '💬 真心话',   badgeClass: 'badge-truth',  frontClass: 'type-truth'  },
+      dare:   { badge: '🔥 挑战任务', badgeClass: 'badge-dare',   frontClass: 'type-dare'   },
+    };
+    const cfg = typeConfig[card.type];
+    const front = getEl('cardFront');
+    front.className = `card-face card-front ${cfg.frontClass}`;
+    const badge = getEl('cardTypeBadge');
+    badge.textContent = cfg.badge;
+    badge.className = `card-type-badge ${cfg.badgeClass}`;
+    getEl('cardTypeEmoji').textContent = card.emoji;
+    getEl('cardTaskText').textContent = card.text;
+    getEl('cardDrinkHint').textContent = `拒绝任务请喝：${state.drinkLabel} 🍺`;
+  }
+
+  /* ---- Animate Card Reveal ---- */
+  function animateCardReveal() {
+    const wrapper = getEl('taskCardWrapper');
+    const drawZone = getEl('drawZone');
+    // Slide in card area
+    drawZone.classList.add('hidden');
+    wrapper.classList.remove('hidden-card');
+    wrapper.classList.remove('flipped');
+    // Delay flip for 3D effect
+    setTimeout(() => { wrapper.classList.add('flipped'); }, 80);
+  }
+
+  /* ---- Complete Task ---- */
+  function completeTask() {
+    showBurst('🎉 完成！');
+    showToast('✅ 太棒了！任务完成！');
+    advancePlayer();
+  }
+
+  /* ---- Skip Task ---- */
+  function skipTask() {
+    showBurst('🍺 喝！');
+    showToast(`⏭ 跳过任务，需要喝：${state.drinkLabel}！`);
+    advancePlayer();
+  }
+
+  /* ---- Advance Player ---- */
+  function advancePlayer() {
+    const prevIdx = state.currentPlayerIdx;
+    state.currentPlayerIdx = (state.currentPlayerIdx + 1) % state.playerCount;
+    if (state.currentPlayerIdx === 0) state.round++;
+    resetCardArea();
+    updateGameUI();
+    // Small animation on player name
+    const nameEl = getEl('currentPlayerName');
+    nameEl.style.transform = 'scale(1.3)';
+    nameEl.style.transition = 'transform 0.3s';
+    setTimeout(() => { nameEl.style.transform = 'scale(1)'; }, 300);
+  }
+
+  /* ---- Prev Player ---- */
+  function prevPlayer() {
+    if (state.cardDrawn) { showToast('⚠️ 请先完成或跳过当前任务'); return; }
+    state.currentPlayerIdx = (state.currentPlayerIdx - 1 + state.playerCount) % state.playerCount;
+    updateGameUI();
+  }
+
+  /* ---- Next Player (skip turn) ---- */
+  function nextPlayer() {
+    if (state.cardDrawn) { showToast('⚠️ 请先完成或跳过当前任务'); return; }
+    state.currentPlayerIdx = (state.currentPlayerIdx + 1) % state.playerCount;
+    if (state.currentPlayerIdx === 0) state.round++;
+    updateGameUI();
+  }
+
+  /* ---- Restart Confirm ---- */
+  function restartConfirm() {
+    if (confirm('确定要重新开始游戏吗？当前进度将丢失。')) {
+      showWelcome();
+    }
+  }
+
+  /* ---- Fullscreen ---- */
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => {
+        getEl('fullscreenBtn').textContent = '⛶ 退出全屏';
+      }).catch(() => { showToast('⚠️ 全屏功能不支持'); });
+    } else {
+      document.exitFullscreen().then(() => {
+        getEl('fullscreenBtn').textContent = '⛶ 全屏';
+      });
+    }
+  }
+
+  document.addEventListener('fullscreenchange', () => {
+    const btn = getEl('fullscreenBtn');
+    if (btn) btn.textContent = document.fullscreenElement ? '⛶ 退出全屏' : '⛶ 全屏';
+  });
+
+  /* ---- Public API ---- */
+  return {
+    showWelcome, showSetup, startGame,
+    changePlayerCount, setDiff, setDrink,
+    drawCard, completeTask, skipTask,
+    prevPlayer, nextPlayer,
+    restartConfirm, toggleFullscreen,
+  };
+})();
+</script>
+</body>
+</html>
