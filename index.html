@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0015">
+<link rel="manifest" href="manifest.json">
 <title>派对狂欢夜 🎉</title>
 <style>
   /* ===== CSS Variables ===== */
@@ -640,7 +644,7 @@
     <button class="btn btn-primary" onclick="Game.showSetup()" style="font-size:1.2rem;padding:16px 48px;border-radius:60px;">
       开始游戏 🚀
     </button>
-    <p style="margin-top:16px;font-size:0.8rem;color:var(--text-secondary);">2 ~ 12 名玩家 · 90+ 张任务卡</p>
+    <p style="margin-top:16px;font-size:0.8rem;color:var(--text-secondary);">2 ~ 12 名玩家 · 150+ 张任务卡</p>
   </div>
 
   <!-- ===== SETUP SCREEN ===== -->
@@ -962,6 +966,16 @@ const TASKS = {
       { id: 'ca13', text: '选3人，你们4个围成圈手牵手，每人说一句真心话', emoji: '🔄' },
       { id: 'ca14', text: '指定全场最安静的人，你和他/她一起表演一段即兴双人舞', emoji: '💃' },
       { id: 'ca15', text: '所有人站成一圈，你选方向开始"击掌传花"，停到谁谁喝酒', emoji: '🌸' },
+      { id: 'ca16', text: '坐到指定的人大腿上，一起喝完一杯酒', emoji: '🔥' },
+      { id: 'ca17', text: '全场异性/同性依次亲你一口（脸颊），你闭眼猜谁是你的另一半，猜错喝酒', emoji: '💋' },
+      { id: 'ca18', text: '选2组以上家庭参与：和指定的人用嘴传一张纸巾，掉了重来', emoji: '😮' },
+      { id: 'ca19', text: '你做板凳，指定的人坐在你背上，坚持20秒', emoji: '💪' },
+      { id: 'ca20', text: '选一个人，帮他/她按摩肩膀30秒，对方必须给点评打分', emoji: '💆' },
+      { id: 'ca21', text: '你闭眼站好，让全场轮流用一个词在你耳边形容你', emoji: '👂' },
+      { id: 'ca22', text: '选一组其他家庭成员PK：鼻尖碰鼻尖，谁先笑谁喝酒', emoji: '👃' },
+      { id: 'ca23', text: '全场用手机给你拍照，你必须做出"求偶"姿势，拍完发群里', emoji: '📸' },
+      { id: 'ca24', text: '闭眼，被指定的人从背后环抱你5秒，你猜是谁抱的', emoji: '🫂' },
+      { id: 'ca25', text: '和指定的人玩"推手游戏"，双脚并拢面对面，谁先动谁喝酒', emoji: '🤝' },
     ],
     truth: [
       { id: 'ct1',  text: '说出你觉得今晚在场最想和你来一张亲密合照的人', emoji: '📸' },
@@ -979,6 +993,12 @@ const TASKS = {
       { id: 'ct13', text: '说出你觉得今晚最可能被偷拍发到朋友圈的人', emoji: '📸' },
       { id: 'ct14', text: '如果让你给今晚的派对起一个名字，你会起什么？', emoji: '📝' },
       { id: 'ct15', text: '你觉得今晚谁会是最晚离开的人？为什么？', emoji: '🌙' },
+      { id: 'ct16', text: '展示你手机相册里最近一张自拍给全场看', emoji: '📱' },
+      { id: 'ct17', text: '打开微信，让全场看你"最近聊天"前5个联系人名字，并读出最新一条消息内容', emoji: '💬' },
+      { id: 'ct18', text: '如果今晚必须和在场其他家庭成员接吻，你会选谁？只能说一个', emoji: '💋' },
+      { id: 'ct19', text: '说出你手机里最不想被人看到的一个App，解释为什么', emoji: '📱' },
+      { id: 'ct20', text: '说出你认为自己最"不为人知"的一个小癖好', emoji: '🤫' },
+      { id: 'ct21', text: '你最近一次脸红是因为什么？详细说说', emoji: '😳' },
     ],
     dare: [
       { id: 'cd1',  text: '表演30秒无实物"卡拉OK"，题目由旁边的人指定', emoji: '🎶' },
@@ -996,6 +1016,11 @@ const TASKS = {
       { id: 'cd13', text: '模仿今晚在场的3个人的招牌动作或说话方式', emoji: '🎭' },
       { id: 'cd14', text: '挑战：用屁股写"派对狂欢夜"五个字，全场数数', emoji: '📝' },
       { id: 'cd15', text: '被全场投票选出"今晚最欠扁的人"，做一个求饶的表情包姿势', emoji: '🙇' },
+      { id: 'cd16', text: '解锁手机，让旁边的人翻你的相册30秒，你不能看屏幕', emoji: '📱' },
+      { id: 'cd17', text: '打开外卖/购物App，大声读出最近3笔订单', emoji: '🛒' },
+      { id: 'cd18', text: '让旁边的人翻你手机搜索记录，挑一条念出来', emoji: '🔍' },
+      { id: 'cd19', text: '全场每人在你脸上贴一张便利贴写一个字，凑成一句话，你贴着走完一圈', emoji: '🤡' },
+      { id: 'cd20', text: '用最骚的表情和动作走一段"红毯"（从桌这头走到那头），全场当观众', emoji: '🌟' },
     ],
   },
 };
@@ -1323,6 +1348,34 @@ const Game = (() => {
     restartConfirm, toggleFullscreen,
   };
 })();
+
+// ===== Service Worker 离线缓存 =====
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'party-game-v1';
+    const ASSETS = ['/'];
+    self.addEventListener('install', e => {
+      e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
+      self.skipWaiting();
+    });
+    self.addEventListener('activate', e => {
+      e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))));
+      self.clients.claim();
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
+        const clone = resp.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+        return resp;
+      }).catch(() => caches.match('/'))));
+    });
+  `;
+  const blob = new Blob([swCode], { type: 'application/javascript' });
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).then(reg => {
+    console.log('✅ 离线缓存已激活，断网也能玩！');
+  }).catch(err => console.log('离线缓存跳过:', err));
+}
 </script>
 </body>
 </html>
